@@ -1,0 +1,146 @@
+#include <iostream>
+#include <vector>
+#include <string>
+
+using namespace std;
+
+class Movie {
+private:
+    string title;
+    int availableSeats;
+
+public:
+    Movie(string title, int totalSeats) {
+        this->title = title;
+        this->availableSeats = totalSeats;
+    }
+
+    void showMovieDetails() {
+        cout << "Movie Title: " << title << "\n";
+        cout << "Available Seats: " << availableSeats << "\n";
+    }
+
+    bool bookTickets(int numberOfTickets) {
+        if (availableSeats >= numberOfTickets) {
+            availableSeats -= numberOfTickets;
+            cout << numberOfTickets << " tickets booked for " << title << ".\n";
+            return true;
+        } else {
+            cout << "Sorry, not enough seats available.\n";
+            return false;
+        }
+    }
+
+    void cancelTickets(int numberOfTickets) {
+        availableSeats += numberOfTickets;
+        cout << numberOfTickets << " tickets canceled for " << title << ".\n";
+    }
+
+    string getTitle() {
+        return title;
+    }
+
+    int getAvailableSeats() {
+        return availableSeats;
+    }
+};
+
+class Cinema {
+private:
+    vector<Movie> movies;
+
+public:
+    void addMovie(string title, int totalSeats) {
+        movies.push_back(Movie(title, totalSeats));
+    }
+
+    void showMovies() {
+        cout << "\nAvailable Movies:\n";
+        for (int i = 0; i < movies.size(); i++) {
+            cout << i + 1 << ". ";
+            movies[i].showMovieDetails();
+        }
+    }
+
+    void bookTicketsForMovie() {
+        int movieChoice, ticketsToBook;
+        showMovies();
+        cout << "Enter the movie number to book tickets: ";
+        cin >> movieChoice;
+        if (movieChoice < 1 || movieChoice > movies.size()) {
+            cout << "Invalid movie choice!\n";
+            return;
+        }
+
+        cout << "Enter number of tickets to book: ";
+        cin >> ticketsToBook;
+
+        if (ticketsToBook <= 0) {
+            cout << "Invalid number of tickets.\n";
+            return;
+        }
+
+        Movie& selectedMovie = movies[movieChoice - 1];
+        selectedMovie.bookTickets(ticketsToBook);
+    }
+
+    void cancelTicketsForMovie() {
+        int movieChoice, ticketsToCancel;
+        showMovies();
+        cout << "Enter the movie number to cancel tickets: ";
+        cin >> movieChoice;
+        if (movieChoice < 1 || movieChoice > movies.size()) {
+            cout << "Invalid movie choice!\n";
+            return;
+        }
+
+        cout << "Enter number of tickets to cancel: ";
+        cin >> ticketsToCancel;
+
+        if (ticketsToCancel <= 0) {
+            cout << "Invalid number of tickets.\n";
+            return;
+        }
+
+        Movie& selectedMovie = movies[movieChoice - 1];
+        selectedMovie.cancelTickets(ticketsToCancel);
+    }
+};
+
+int main() {
+    Cinema cinema;
+    int choice;
+
+    cinema.addMovie("Avatar 2", 100);
+    cinema.addMovie("Mission: Impossible 7", 80);
+    cinema.addMovie("The Hunger Games: The Ballad of Songbirds and Snakes", 120);
+
+    while (true) {
+        cout << "\nCinema Ticket Booking System\n";
+        cout << "1. Show all available movies\n";
+        cout << "2. Book tickets\n";
+        cout << "3. Cancel tickets\n";
+        cout << "4. Exit\n";
+        cout << "Enter your choice: ";
+        cin >> choice;
+
+        switch (choice) {
+            case 1:
+                cinema.showMovies();
+                break;
+            case 2:
+                cinema.bookTicketsForMovie();
+                break;
+            case 3:
+                cinema.cancelTicketsForMovie();
+                break;
+            case 4:
+                cout << "Exiting the system. Thank you for using the Cinema Ticket Booking System.\n";
+                return 0;
+            default:
+                cout << "Invalid choice! Please try again.\n";
+        }
+    }
+
+    return 0;
+}
