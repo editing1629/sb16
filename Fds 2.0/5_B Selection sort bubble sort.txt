@@ -1,0 +1,36 @@
+def selection_sort(arr):
+    n = len(arr)
+    for i in range(n):
+        min_index = i
+        for j in range(i + 1, n):
+            if arr[j] < arr[min_index]:
+                min_index = j
+        arr[i], arr[min_index] = arr[min_index], arr[i]
+    return arr
+
+def bubble_sort(arr):
+    n = len(arr)
+    for i in range(n):
+        for j in range(0, n - i - 1):
+            if arr[j] > arr[j + 1]:
+                arr[j], arr[j + 1] = arr[j + 1], arr[j]
+    return arr
+
+def display_top_five_scores(arr):
+    print("Top five scores:")
+    for score in arr[-5:]:
+        print(score)
+
+percentages = [85.6, 72.4, 90.1, 67.3, 92.5, 78.9, 88.0, 95.3, 70.6, 81.5]
+
+print("Original percentages:", percentages)
+
+selection_sorted_percentages = selection_sort(percentages.copy())
+print("\nPercentages sorted using Selection Sort:")
+print(selection_sorted_percentages)
+display_top_five_scores(selection_sorted_percentages)
+
+bubble_sorted_percentages = bubble_sort(percentages.copy())
+print("\nPercentages sorted using Bubble Sort:")
+print(bubble_sorted_percentages)
+display_top_five_scores(bubble_sorted_percentages)

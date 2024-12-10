@@ -1,0 +1,134 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+struct Node {
+    string name;
+    Node* next;
+};
+
+class IceCreamSet {
+private:
+    Node* head;
+
+public:
+    IceCreamSet() {
+        head = nullptr;
+    }
+
+    void addStudent(string studentName) {
+        Node* newNode = new Node;
+        newNode->name = studentName;
+        newNode->next = nullptr;
+
+        if (head == nullptr) {
+            head = newNode;
+        } else {
+            Node* temp = head;
+            while (temp->next != nullptr) {
+                temp = temp->next;
+            }
+            temp->next = newNode;
+        }
+    }
+
+    bool contains(string studentName) {
+        Node* temp = head;
+        while (temp != nullptr) {
+            if (temp->name == studentName) {
+                return true;
+            }
+            temp = temp->next;
+        }
+        return false;
+    }
+
+    void display() {
+        Node* temp = head;
+        while (temp != nullptr) {
+            cout << temp->name << " ";
+            temp = temp->next;
+        }
+        cout << endl;
+    }
+
+    Node* getHead() {
+        return head;
+    }
+};
+
+void computeAndDisplayResults(IceCreamSet& setA, IceCreamSet& setB) {
+    cout << "Students who like both Vanilla and Butterscotch:" << endl;
+    Node* tempA = setA.getHead();
+    while (tempA != nullptr) {
+        if (setB.contains(tempA->name)) {
+            cout << tempA->name << " ";
+        }
+        tempA = tempA->next;
+    }
+    cout << endl;
+
+    cout << "Students who like either Vanilla or Butterscotch but not both:" << endl;
+    tempA = setA.getHead();
+    while (tempA != nullptr) {
+        if (!setB.contains(tempA->name)) {
+            cout << tempA->name << " ";
+        }
+        tempA = tempA->next;
+    }
+
+    Node* tempB = setB.getHead();
+    while (tempB != nullptr) {
+        if (!setA.contains(tempB->name)) {
+            cout << tempB->name << " ";
+        }
+        tempB = tempB->next;
+    }
+    cout << endl;
+
+    cout << "Students who like neither Vanilla nor Butterscotch:" << endl;
+    tempA = setA.getHead();
+    tempB = setB.getHead();
+    int totalStudents = 0;
+    int studentsWithLikes = 0;
+
+    while (tempA != nullptr) {
+        studentsWithLikes++;
+        totalStudents++;
+        tempA = tempA->next;
+    }
+    while (tempB != nullptr) {
+        studentsWithLikes++;
+        totalStudents++;
+        tempB = tempB->next;
+    }
+
+    cout << "Total number of students: " << totalStudents << endl;
+    cout << "Students who like either Vanilla or Butterscotch: " << studentsWithLikes << endl;
+    cout << "Students who like neither Vanilla nor Butterscotch: " << totalStudents - studentsWithLikes << endl;
+}
+
+int main() {
+    IceCreamSet setA; // Students who like Vanilla
+    IceCreamSet setB; // Students who like Butterscotch
+
+    setA.addStudent("Alice");
+    setA.addStudent("Bob");
+    setA.addStudent("Charlie");
+    setA.addStudent("David");
+
+    setB.addStudent("Bob");
+    setB.addStudent("Charlie");
+    setB.addStudent("Eve");
+    setB.addStudent("Frank");
+
+    cout << "Students who like Vanilla Ice-cream:" << endl;
+    setA.display();
+
+    cout << "Students who like Butterscotch Ice-cream:" << endl;
+    setB.display();
+
+    computeAndDisplayResults(setA, setB);
+
+    return 0;
+}

@@ -1,0 +1,35 @@
+def average_score(marks):
+    return sum(marks) / len(marks)
+
+def highest_and_lowest_score(marks):
+    highest = max(marks)
+    lowest = min(marks)
+    return highest, lowest
+
+def count_absent_students(total_students, marks):
+    return total_students - len(marks)
+
+def mark_with_highest_frequency(marks):
+    frequency = {}
+    for mark in marks:
+        if mark in frequency:
+            frequency[mark] += 1
+        else:
+            frequency[mark] = 1
+    highest_freq = max(frequency.values())
+    most_frequent_marks = [mark for mark, freq in frequency.items() if freq == highest_freq]
+    return most_frequent_marks
+
+total_students = 10
+marks = [80, 90, 85, 70, 90, 60, 80, 70, 90]
+
+average = average_score(marks)
+highest, lowest = highest_and_lowest_score(marks)
+absent_count = count_absent_students(total_students, marks)
+most_frequent_marks = mark_with_highest_frequency(marks)
+
+print("Average score of the class:", average)
+print("Highest score in the class:", highest)
+print("Lowest score in the class:", lowest)
+print("Count of students who were absent for the test:", absent_count)
+print("Marks with highest frequency:", most_frequent_marks)

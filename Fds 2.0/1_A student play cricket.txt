@@ -1,0 +1,49 @@
+def add_to_group(group, student):
+    if student not in group:
+        group.append(student)
+
+def both_cricket_and_badminton(group_a, group_b):
+    result = []
+    for student in group_a:
+        if student in group_b:
+            add_to_group(result, student)
+    return result
+
+def either_cricket_or_badminton_not_both(group_a, group_b):
+    result = []
+    for student in group_a:
+        if student not in group_b:
+            add_to_group(result, student)
+    for student in group_b:
+        if student not in group_a:
+            add_to_group(result, student)
+    return result
+
+def neither_cricket_nor_badminton(all_students, group_a, group_b):
+    count = 0
+    for student in all_students:
+        if student not in group_a and student not in group_b:
+            count += 1
+    return count
+
+def cricket_and_football_not_badminton(group_a, group_b, group_c):
+    count = 0
+    for student in group_a:
+        if student in group_c and student not in group_b:
+            count += 1
+    return count
+
+group_a = ['Alice', 'Bob', 'Charlie', 'David']
+group_b = ['Alice', 'Eve', 'Charlie', 'Frank']
+group_c = ['Bob', 'Charlie', 'Grace']
+all_students = ['Alice', 'Bob', 'Charlie', 'David', 'Eve', 'Frank', 'Grace', 'Hannah', 'Ivy']
+
+both_cricket_badminton = both_cricket_and_badminton(group_a, group_b)
+either_cricket_or_badminton_not_both = either_cricket_or_badminton_not_both(group_a, group_b)
+neither_cricket_nor_badminton_count = neither_cricket_nor_badminton(all_students, group_a, group_b)
+cricket_and_football_not_badminton_count = cricket_and_football_not_badminton(group_a, group_b, group_c)
+
+print("Students who play both cricket and badminton:", both_cricket_badminton)
+print("Students who play either cricket or badminton but not both:", either_cricket_or_badminton_not_both)
+print("Number of students who play neither cricket nor badminton:", neither_cricket_nor_badminton_count)
+print("Number of students who play cricket and football but not badminton:", cricket_and_football_not_badminton_count)
