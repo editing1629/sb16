@@ -1,0 +1,97 @@
+#include <iostream>
+using namespace std;
+
+class complex {
+    float real;
+    float img;
+
+public:
+    complex() {
+        real = 0.0;
+        img = 0.0;
+    }
+
+    complex(float real, float img) {
+        this->real = real;
+        this->img = img;
+    }
+
+    friend complex operator+(const complex& c1, const complex& c2) {
+        complex c3;
+        c3.real = c1.real + c2.real;
+        c3.img = c1.img + c2.img;
+        return c3;
+    }
+
+    friend complex operator*(const complex& c1, const complex& c2) {
+        complex c4;
+        c4.real = c1.real * c2.real - c1.img * c2.img;
+        c4.img = c1.real * c2.img + c1.img * c2.real;
+        return c4;
+    }
+
+    friend istream& operator>>(istream& in, complex& c) {
+        cout << "Enter complex number: " << endl;
+        cout << "Enter real part: ";
+        in >> c.real;
+        cout << "Enter imaginary part: ";
+        in >> c.img;
+        return in;
+    }
+
+    friend ostream& operator<<(ostream& out, const complex& c) {
+        out << c.real;
+        if (c.img >= 0)
+            out << " + " << c.img << "i" << endl;
+        else
+            out << " - " << -c.img << "i" << endl;
+        return out;
+    }
+};
+
+int main() {
+    complex c1, c2, c3, c4;
+    int choice;
+
+    while (true) {
+        cout << "--------------------------------------------------------" << endl;
+        cout << "1. Enter complex number values" << endl;
+        cout << "2. Display complex number" << endl;
+        cout << "3. Add complex numbers" << endl;
+        cout << "4. Multiply complex numbers" << endl;
+        cout << "5. Exit" << endl;
+        cout << "Please enter your choice: ";
+        cout << "--------------------------------------------------------" << endl;
+        cin >> choice;
+
+        switch (choice) {
+            case 1:
+                cin >> c1;
+                cin >> c2;
+                break;
+
+            case 2:
+                cout << "Displaying complex numbers: " << endl;
+                cout << "Complex number 1: " << c1;
+                cout << "Complex number 2: " << c2;
+                break;
+
+            case 3:
+                cout << "Addition result: " << endl;
+                c3 = c1 + c2;
+                cout << c3;
+                break;
+
+            case 4:
+                cout << "Multiplication result: " << endl;
+                c4 = c1 * c2;
+                cout << c4;
+                break;
+
+            case 5:
+                return 0;
+            default:
+                cout << "Invalid choice" << endl;
+        }
+    }
+}

@@ -1,0 +1,52 @@
+#include<iostream>
+using namespace std;
+
+template<class T>
+void selection(T a[], int n) {
+    int min, i, j;
+    T temp;
+    for (i = 0; i < n - 1; i++) {
+        min = i;
+        for (j = i + 1; j < n; j++) {
+            if (a[j] < a[min]) {
+                min = j;
+            }
+        }
+        temp = a[i];
+        a[i] = a[min];
+        a[min] = temp;
+    }
+    cout << "\nThe sorted list is: \n";
+    for (i = 0; i < n; i++) {
+        cout << "\t" << a[i];
+    }
+    cout << endl;
+}
+
+int main() {
+    int n;
+
+    cout << "\nSelection Sort\n";
+
+    cout << "\nHandling integer elements\n";
+    cout << "How many elements are there? ";
+    cin >> n;
+    int a[n];
+    cout << "Enter the integer numbers: ";
+    for (int i = 0; i < n; i++) {
+        cin >> a[i];
+    }
+    selection(a, n);
+
+    cout << "\nHandling float elements\n";
+    cout << "How many elements are there? ";
+    cin >> n;
+    float b[n];
+    cout << "Enter the float numbers: ";
+    for (int i = 0; i < n; i++) {
+        cin >> b[i];
+    }
+    selection(b, n);
+
+    return 0;
+}
