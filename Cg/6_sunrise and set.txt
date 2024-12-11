@@ -1,0 +1,83 @@
+#include <GL/glut.h>
+#include <cmath>
+
+float sunPosY = -0.5f;
+float skyColorR = 0.0f, skyColorG = 0.0f, skyColorB = 0.5f;
+float sunRadius = 0.1f;
+float sunColorR = 1.0f, sunColorG = 1.0f, sunColorB = 0.0f;
+float time = 0.0f;
+bool isSunrise = true;
+
+void drawSun() {
+    glPushMatrix();
+    glTranslatef(0.0f, sunPosY, 0.0f);
+    glColor3f(sunColorR, sunColorG, sunColorB);
+    glutSolidSphere(sunRadius, 50, 50);
+    glPopMatrix();
+}
+
+void setSkyColor() {
+    if (isSunrise) {
+        skyColorR = 0.0f + time * 0.6f;
+        skyColorG = 0.0f + time * 0.6f;
+        skyColorB = 0.5f - time * 0.3f;
+        if (time >= 1.0f) {
+            isSunrise = false;
+        }
+    } else {
+        skyColorR = 0.6f - time * 0.6f;
+        skyColorG = 0.6f - time * 0.6f;
+        skyColorB = 0.2f + time * 0.3f;
+        if (time >= 1.0f) {
+            isSunrise = true;
+        }
+    }
+    glClearColor(skyColorR, skyColorG, skyColorB, 1.0f);
+}
+
+void update(int value) {
+    time += 0.005f;
+    if (time > 1.0f) {
+        time = 0.0f;
+    }
+
+    if (isSunrise) {
+        sunPosY = -0.5f + time * 1.5f;
+    } else {
+        sunPosY = 0.5f - time * 1.5f;
+    }
+
+    setSkyColor();
+
+    glutPostRedisplay();
+    glutTimerFunc(16, update, 0);
+}
+
+void display() {
+    glClear(GL_COLOR_BUFFER_BIT);
+    drawSun();
+    glutSwapBuffers();
+}
+
+void init() {
+    glClearColor(skyColorR, skyColorG, skyColorB, 1.0f);
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    gluOrtho2D(-1.0, 1.0, -1.0, 1.0);
+    glMatrixMode(GL_MODELVIEW);
+}
+
+int main(int argc, char** argv) {
+    glutInit(&argc, argv);
+    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
+    glutInitWindowSize(800, 600);
+    glutCreateWindow("Sunrise and Sunset");
+
+    init();
+
+    glutDisplayFunc(display);
+    glutTimerFunc(25, update, 0);
+
+    glutMainLoop();
+    return 0;
+}

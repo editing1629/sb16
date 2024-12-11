@@ -1,0 +1,57 @@
+#include <graphics.h>
+#include <cmath>
+#include <thread>
+#include <chrono>
+
+class Waveform {
+public:
+    virtual int getPosition(int time) const = 0;
+};
+
+class SineWave : public Waveform {
+private:
+    int amplitude;
+    double frequency;
+    double phase;
+
+public:
+    SineWave(int amp, double freq, double ph = 0) : amplitude(amp), frequency(freq), phase(ph) {}
+
+    int getPosition(int time) const override {
+        return static_cast<int>(amplitude * std::sin(2 * 3.14159265 * frequency * time + phase));
+    }
+};
+
+void simulateBouncingBall(const Waveform& waveform, int duration, int timeStep) {
+    int time = 0;
+    int x = 100;
+    int yBase = 240;
+    int radius = 30;
+
+    while (time <= duration) {
+        int y = yBase - waveform.getPosition(time);
+
+        cleardevice();
+
+        setcolor(WHITE);
+        circle(x, y, radius);
+        floodfill(x, y, WHITE);
+
+        std::this_thread::sleep_for(std::chrono::milliseconds(50));
+        time += timeStep;
+    }
+}
+
+int main() {
+    int gd = DETECT, gm;
+    initgraph(&gd, &gm, NULL);
+
+    SineWave sineWave(100, 0.02);
+
+    simulateBouncingBall(sineWave, 500, 1);
+
+    getch();
+    closegraph();
+
+    return 0;
+}

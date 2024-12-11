@@ -1,0 +1,156 @@
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
+#include <iostream>
+
+float scaleFactor = 1.0f;
+float translateX = 0.0f, translateY = 0.0f, translateZ = -5.0f; // Translate the cube away from the camera
+float rotateX = 0.0f, rotateY = 0.0f, rotateZ = 0.0f;
+
+void drawCube() {
+    glBegin(GL_QUADS);
+
+    // Front face (z = 1.0f)
+    glColor3f(1.0f, 0.0f, 0.0f); // Red
+    glVertex3f(-0.5f, -0.5f, 0.5f);
+    glVertex3f(0.5f, -0.5f, 0.5f);
+    glVertex3f(0.5f, 0.5f, 0.5f);
+    glVertex3f(-0.5f, 0.5f, 0.5f);
+
+    // Back face (z = -1.0f)
+    glColor3f(0.0f, 1.0f, 0.0f); // Green
+    glVertex3f(-0.5f, -0.5f, -0.5f);
+    glVertex3f(0.5f, -0.5f, -0.5f);
+    glVertex3f(0.5f, 0.5f, -0.5f);
+    glVertex3f(-0.5f, 0.5f, -0.5f);
+
+    // Top face (y = 0.5f)
+    glColor3f(0.0f, 0.0f, 1.0f); // Blue
+    glVertex3f(-0.5f, 0.5f, -0.5f);
+    glVertex3f(0.5f, 0.5f, -0.5f);
+    glVertex3f(0.5f, 0.5f, 0.5f);
+    glVertex3f(-0.5f, 0.5f, 0.5f);
+
+    // Bottom face (y = -0.5f)
+    glColor3f(1.0f, 1.0f, 0.0f); // Yellow
+    glVertex3f(-0.5f, -0.5f, -0.5f);
+    glVertex3f(0.5f, -0.5f, -0.5f);
+    glVertex3f(0.5f, -0.5f, 0.5f);
+    glVertex3f(-0.5f, -0.5f, 0.5f);
+
+    // Right face (x = 0.5f)
+    glColor3f(1.0f, 0.0f, 1.0f); // Magenta
+    glVertex3f(0.5f, -0.5f, -0.5f);
+    glVertex3f(0.5f, 0.5f, -0.5f);
+    glVertex3f(0.5f, 0.5f, 0.5f);
+    glVertex3f(0.5f, -0.5f, 0.5f);
+
+    // Left face (x = -0.5f)
+    glColor3f(0.0f, 1.0f, 1.0f); // Cyan
+    glVertex3f(-0.5f, -0.5f, -0.5f);
+    glVertex3f(-0.5f, 0.5f, -0.5f);
+    glVertex3f(-0.5f, 0.5f, 0.5f);
+    glVertex3f(-0.5f, -0.5f, 0.5f);
+
+    glEnd();
+}
+
+void applyTransformations() {
+    glScalef(scaleFactor, scaleFactor, scaleFactor); // Scaling
+    glTranslatef(translateX, translateY, translateZ); // Translation
+    glRotatef(rotateX, 1.0f, 0.0f, 0.0f); // Rotation around X-axis
+    glRotatef(rotateY, 0.0f, 1.0f, 0.0f); // Rotation around Y-axis
+    glRotatef(rotateZ, 0.0f, 0.0f, 1.0f); // Rotation around Z-axis
+}
+
+void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
+    if (action == GLFW_PRESS || action == GLFW_REPEAT) {
+        switch (key) {
+            case GLFW_KEY_UP:
+                translateY += 0.1f; // Move up
+                break;
+            case GLFW_KEY_DOWN:
+                translateY -= 0.1f; // Move down
+                break;
+            case GLFW_KEY_LEFT:
+                translateX -= 0.1f; // Move left
+                break;
+            case GLFW_KEY_RIGHT:
+                translateX += 0.1f; // Move right
+                break;
+            case GLFW_KEY_W:
+                rotateX += 5.0f; // Rotate around X-axis
+                break;
+            case GLFW_KEY_S:
+                rotateX -= 5.0f; // Rotate around X-axis
+                break;
+            case GLFW_KEY_A:
+                rotateY -= 5.0f; // Rotate around Y-axis
+                break;
+            case GLFW_KEY_D:
+                rotateY += 5.0f; // Rotate around Y-axis
+                break;
+            case GLFW_KEY_Q:
+                rotateZ -= 5.0f; // Rotate around Z-axis
+                break;
+            case GLFW_KEY_E:
+                rotateZ += 5.0f; // Rotate around Z-axis
+                break;
+            case GLFW_KEY_EQUAL:
+                scaleFactor += 0.1f; // Scale up
+                break;
+            case GLFW_KEY_MINUS:
+                scaleFactor -= 0.1f; // Scale down
+                break;
+            default:
+                break;
+        }
+    }
+}
+
+int main() {
+    if (!glfwInit()) {
+        std::cerr << "Failed to initialize GLFW!" << std::endl;
+        return -1;
+    }
+
+    GLFWwindow* window = glfwCreateWindow(800, 600, "3D Cube Transformations", NULL, NULL);
+    if (!window) {
+        std::cerr << "Failed to create GLFW window!" << std::endl;
+        glfwTerminate();
+        return -1;
+    }
+
+    glfwMakeContextCurrent(window);
+
+    if (glewInit() != GLEW_OK) {
+        std::cerr << "Failed to initialize GLEW!" << std::endl;
+        return -1;
+    }
+
+    glfwSetKeyCallback(window, keyCallback);
+
+    glEnable(GL_DEPTH_TEST);
+
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    gluPerspective(45.0f, 800.0f / 600.0f, 0.1f, 100.0f);  // Set perspective projection
+
+    glMatrixMode(GL_MODELVIEW);
+
+    while (!glfwWindowShouldClose(window)) {
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+        glLoadIdentity();
+
+        applyTransformations();
+
+        drawCube();
+
+        glfwSwapBuffers(window);
+        glfwPollEvents();
+    }
+
+    glfwDestroyWindow(window);
+    glfwTerminate();
+    return 0;
+}
